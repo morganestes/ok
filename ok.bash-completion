@@ -1,0 +1,22 @@
+#!/bin/bash
+
+_ok() {
+  local ok_path commands projects cur prev
+
+  ok_path="${HOME}/.ok"
+  commands=$(ls -1 "${ok_path}/command" | sed -e 's/\..*$//')
+  projects=$(ls -1 "${ok_path}/project" | sed -e 's/\..*$//')
+  cur="${COMP_WORDS[COMP_CWORD]}"
+  prev="${COMP_WORDS[COMP_CWORD-1]}"
+
+  COMPREPLY=()
+
+  case "${prev}" in
+    ok) COMPREPLY=($(compgen -W "${commands}" -- "${cur}")) ;;
+    *) COMPREPLY=($(compgen -W "${projects}" -- "${cur}")) ;;
+  esac
+
+  return 0
+}
+
+complete -F _ok ok
